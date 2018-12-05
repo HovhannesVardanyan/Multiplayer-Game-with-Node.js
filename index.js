@@ -1,11 +1,11 @@
-	var golds=[];
-	var bats=[];
-	var col=false;
-	var colr=false;
-	var coll=false;
-	var colu=false;
+var golds=[];
+var bats=[];
+var col=false;
+var colr=false;
+var coll=false;
+var colu=false;
 var stones=[];
-	var sckt = [];
+var sckt = [];
 var hert;
 var players = [];
 var basas = [];
@@ -30,7 +30,7 @@ var fogs4=[];
 var hat=0;
 var corx=new Array();
 var cory=new Array();
- var energx=new Array();
+var energx=new Array();
 var energy=new Array();
 var resuy;
 var resux;
@@ -41,28 +41,28 @@ var hert=0;
 var chores=[];
 var chures=[];
 var check;
- var caxs=true;
- 
- var red={
- "side":"red",
- "x":0,
- "y":0
- };
- var green={
- "side":"green",
- "x":736,
- "y":0
- };
- var yellow={
- "side":"yellow",
- "x":0,
- "y":736
- };
- var blue={
- "side":"blue",
- "x":736,
- "y":736
- };
+var caxs=true;
+
+var red={
+"side":"red",
+"x":0,
+"y":0
+};
+var green={
+"side":"green",
+"x":736,
+"y":0
+};
+var yellow={
+"side":"yellow",
+"x":0,
+"y":736
+};
+var blue={
+"side":"blue",
+"x":736,
+"y":736
+};
  
  	for(var k=0;k<8;k++)
 	{
@@ -97,7 +97,7 @@ fogs4.splice(63,1);
 	var http=require("http").createServer(app);
 	var io=require("socket.io").listen(http);
 	http.listen(8080);
-	io.set("log level",1)
+	//io.set("log level",1)
 	
 	app.get("/",function(req,res){
 	
@@ -910,7 +910,5 @@ io.sockets.emit("gen",players[lm]);
 
 }
 }
-
-               						
 						
 	});
