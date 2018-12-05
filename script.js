@@ -1,34 +1,32 @@
-var player1;
-var energs=[];
-var obstacles=[];
-var resus=[];
-var player2;
-var player3;
-var player4;
-var socketPlayer1;
-var socketBasa2;
-var socketPlayer2;
-var socketBasa3;
-var socketPlayer3;
-var socketBasa4;
-var socketPlayer4;
-var grass= [];
-var clouds1=[];
-var clouds2=[];
-var clouds3=[];
-var clouds4=[];
-var stage1;
-var stage2;
-var queue;
-var red;
-var blue;
-var green;
-var yellow;
+const energs=[];
+const obstacles=[];
+const resus=[];
+const grass= [];
+const clouds1=[];
+const clouds2=[];
+const clouds3=[];
+const clouds4=[];
+let stage1;
+let stage2;
+let stage3;
+let queue;
+let red;
+let blue;
+let green;
+let yellow;
+const players = [];
+const socketPlayers = [];
+const englishToIndex = {
+	"first" : "1",
+	"second" : "2",
+	"third" : "3",
+	"fourth" : "4"
+};
 $(function()
 {
 	stage1=new createjs.Stage("background");
 	stage2=new createjs.Stage("arena");
-	stage3=new createjs.Stage("fog");
+	stage3 = new createjs.Stage("fog");
 	queue=new createjs.LoadQueue(true);
 	queue.addEventListener("complete",handleComplete);
 	queue.loadManifest
@@ -124,67 +122,67 @@ function handleComplete() {
 
 	socket.on("1", function(data) {
 		window["side"] = data["side"];
-		player1 = new Player(data["name"], window["side"], data["player"], data["x"], data["y"],0,500);
-		$("body").append(player1.energy);
-		$("body").append(player1.hashiv);
-		stage2.addChild(player1.playerImage);
-		socket.emit("newPlayerCreated", {"id":player1.id, "x":player1.x, "y":player1.y, "side":player1.screenSide, "player":player1.who,"value":player1.value});
+		players[1] = new Player(data["name"], window["side"], data["player"], data["x"], data["y"],0,500);
+		$("body").append(players[1].energy);
+		$("body").append(players[1].hashiv);
+		stage2.addChild(players[1].playerImage);
+		socket.emit("newPlayerCreated", {"id":players[1].id, "x":players[1].x, "y":players[1].y, "side":players[1].screenSide, "player":players[1].who,"value":players[1].value});
 		stage2.update();
 	});
 
 	socket.on("2", function(data) {
 		window["side"] = data["side"];
-		player2 = new Player(data["name"], window["side"], data["player"], data["x"], data["y"],0,500);
-		$("body").append(player2.energy);
-		$("body").append(player2.hashiv)
-		stage2.addChild(player2.playerImage);
-		socket.emit("newPlayerCreated", {"id":player2.id, "x":player2.x, "y":player2.y, "side":player2.screenSide, "player":player2.who,"value":player2.value});
+		players[2] = new Player(data["name"], window["side"], data["player"], data["x"], data["y"],0,500);
+		$("body").append(players[2].energy);
+		$("body").append(players[2].hashiv)
+		stage2.addChild(players[2].playerImage);
+		socket.emit("newPlayerCreated", {"id":players[2].id, "x":players[2].x, "y":players[2].y, "side":players[2].screenSide, "player":players[2].who,"value":players[2].value});
 		stage2.update();
 	});
 
 	socket.on("3", function(data) {
 		window["side"] = data["side"];
-		player3 = new Player(data["name"], window["side"], data["player"], data["x"], data["y"],0,500);
-		$("body").append(player3.energy);
-		$("body").append(player3.hashiv);
-		stage2.addChild(player3.playerImage);
-		socket.emit("newPlayerCreated", {"id":player3.id, "x":player3.x, "y":player3.y, "side":player3.screenSide, "player":player3.who,"value":player3.value});
+		players[3] = new Player(data["name"], window["side"], data["player"], data["x"], data["y"],0,500);
+		$("body").append(players[3].energy);
+		$("body").append(players[3].hashiv);
+		stage2.addChild(players[3].playerImage);
+		socket.emit("newPlayerCreated", {"id":players[3].id, "x":players[3].x, "y":players[3].y, "side":players[3].screenSide, "player":players[3].who,"value":players[3].value});
 		stage2.update();
 	});
 
 	socket.on("4", function(data) {
 		window["side"] = data["side"];
-		player4 = new Player(data["name"], window["side"], data["player"], data["x"], data["y"],0,500);
-		$("body").append(player4.energy);
-		$("body").append(player4.hashiv)
-		stage2.addChild(player4.playerImage);
-		socket.emit("newPlayerCreated", {"id":player4.id, "x":player4.x, "y":player4.y, "side":player4.screenSide, "player":player4.who,"value":player4.value});
+		players[4] = new Player(data["name"], window["side"], data["player"], data["x"], data["y"],0,500);
+		$("body").append(players[4].energy);
+		$("body").append(players[4].hashiv)
+		stage2.addChild(players[4].playerImage);
+		socket.emit("newPlayerCreated", {"id":players[4].id, "x":players[4].x, "y":players[4].y, "side":players[4].screenSide, "player":players[4].who,"value":players[4].value});
 		stage2.update();
 	});
 
 	socket.on("firstPosition", function(data) {
-		socketPlayer1 = new Player(data["id"], data["side"], data["player"], data["x"], data["y"]);
-		stage2.addChild(socketPlayer1.playerImage);
+		socketPlayers[1] = new Player(data["id"], data["side"], data["player"], data["x"], data["y"]);
+		stage2.addChild(socketPlayers[1].playerImage);
 		stage2.update();
 	});
 
     socket.on("newPlayer", function(data) {
 		window["side"] = data["side"];
-		socketPlayer2 = new Player(data["id"], window["side"], data["player"], data["x"], data["y"],data["width"]);
-		stage2.addChild(socketPlayer2.playerImage);
+		socketPlayers[2] = new Player(data["id"], window["side"], data["player"], data["x"], data["y"],data["width"]);
+		stage2.addChild(socketPlayers[2].playerImage);
 		stage2.update();
     });
 	socket.on("soc", function(data) {
 		window["side"] = data["side"];
-		socketPlayer3 = new Player(data["name"], window["side"], data["player"], data["x"], data["y"],data["width"]);
-		stage2.addChild(socketPlayer3.playerImage);
+		socketPlayers[3] = new Player(data["name"], window["side"], data["player"], data["x"], data["y"],data["width"]);
+		stage2.addChild(socketPlayers[3].playerImage);
 		stage2.update();
 	});
 
 	socket.on("joke", function(data) {
 		window["side"] = data["side"];
-		socketPlayer4 = new Player(data["name"], window["side"], data["player"], data["x"], data["y"],data["width"]);
-		stage2.addChild(socketPlayer4.playerImage);
+		socketPlayers[4] = new Player(data["name"], window["side"], data["player"], data["x"], data["y"],data["width"]);
+		stage2.addChild(socketPlayers[4].playerImage);
 		stage2.update();
 	});
 
@@ -193,80 +191,34 @@ function handleComplete() {
 	window.addEventListener("keyup", chMovement);
 
 	socket.on("someOneMove", function(data) {
-		if(data["player"] == "first") {
-			if(player1!==undefined) {
-			 	player1.value=data["value"];
-			  	$("#energy").val(player1.value);
-				player1.playerImage.y = data["y"];
-				player1.playerImage.x = data["x"];
-				stage2.update();
-			}
-			 else {
-				socketPlayer1.playerImage.x = data["x"];
-				socketPlayer1.playerImage.y = data["y"];
-				stage2.update();
-			 }
+		const player = players[englishToIndex[data["player"]]];
+		const socketPlayer = socketPlayers[englishToIndex[data["player"]]];
+		if(player!==undefined) {
+			player.value=data["value"];
+			$("#energy").val(player.value);
+			player.playerImage.y = data["y"];
+			player.playerImage.x = data["x"];
+			stage2.update();
 		}
-
-		if(data["player"] == "second") {
-			if(player2!==undefined) {
-				player2.value=data["value"];
-				$("#energy").val(player2.value);
-				player2.playerImage.y = data["y"];
-				player2.playerImage.x = data["x"];
-				stage2.update();
-			}
-			 else {
-				socketPlayer2.playerImage.x = data["x"];
-				socketPlayer2.playerImage.y = data["y"];
-				stage2.update();
-			 }
-		}
-
-		if(data["player"] == "third") {
-			if(player3!==undefined) {
-				player3.value=data["value"];
-			  	$("#energy").val(player3.value);
-				player3.playerImage.y = data["y"];
-				player3.playerImage.x = data["x"];
-				stage2.update();
-			}
-			 else {
-				socketPlayer3.playerImage.x= data["x"];
-				socketPlayer3.playerImage.y = data["y"];
-				stage2.update();
-			 }
-		}
-
-		if(data["player"] == "fourth") {
-			if(player4!==undefined) {
-				player4.value=data["value"];
-				$("#energy").val(player4.value);
-				player4.playerImage.y = data["y"];
-				player4.playerImage.x = data["x"];
-				stage2.update();
-			}
-			else {
-				socketPlayer4.playerImage.x = data["x"];
-				socketPlayer4.playerImage.y = data["y"];
-				stage2.update();
-			}
+		else {
+			socketPlayer.playerImage.x = data["x"];
+			socketPlayer.playerImage.y = data["y"];
+			stage2.update();
 		}
 	});
-
-
 	function movement(evt) {
-		if(player1 !== undefined)
-			player = player1;
-		else if(player2 !== undefined)
-			player = player2;
-		else if(player3 !== undefined)
-			player = player3;
+		let player = null;
+		if(players[1] !== undefined)
+			player = players[1];
+		else if(players[2] !== undefined)
+			player = players[2];
+		else if(players[3] !== undefined)
+			player = players[3];
 		else if(player !== undefined)
-			player = player4;
+			player = players[4];
 		else
 			throw new Error("Something went wrong!");
-			if(player!==undefined) {
+		if(player!==undefined) {
 				if(evt.keyCode==40) {
 					socket.emit("move", {"player":player.who, "y" : player.y,  "x" : player.x,"dir" : "down","width":"16","height":"16","c":"800","plx":player.x+16,"ply":player.y+16,"radx":player.x+32,"rady":player.y+32,"kicking":false,"value":player.value});
 					lastDir="down";
@@ -283,105 +235,38 @@ function handleComplete() {
 					socket.emit("move", {"player":player.who, "x" : player.x,"y" : player.y, "dir" : "right","width":"16","height":"16","c":"800","plx":player.x+16,"ply":player.y+16,"kicking":false,"value":player.value});
 					lastDir="right"
 				}
-				else if(evt.keyCode==75) {
-					ocket.emit("move", {"player":player.who, "x" : player.x, "y" : player.y, "dir" : lastDir,"width":16,"height":16,"c":"800","kicking":true});
-				}
+				else if(evt.keyCode==75)
+					socket.emit("move", {"player":player.who, "x" : player.x, "y" : player.y, "dir" : lastDir,"width":16,"height":16,"c":"800","kicking":true});
 			}
 		}
+		function chMovement(evt) {
+			let player = null;
+			if(players[1] !== undefined)
+				player = players[1];
+			else if(players[2] !== undefined)
+				player = players[2];
+			else if(players[3] !== undefined)
+				player = players[3];
+			else if(player !== undefined)
+				player = players[4];
+			else
+				throw new Error("Something went wrong!");
+			if(player!==undefined) {
+					if(evt.keyCode==40)
+						socket.emit("move", {"player":player.who, "y" : player.y, "dir" : "","width":"16","height":"16"});
+				    else  if(evt.keyCode==38)
+				   		socket.emit("move", {"player":player.who, "y" : player.y, "dir" : "","width":"16","height":"16"});
 
+					else if(evt.keyCode==37)
+						socket.emit("move", {"player":player.who, "x" : player.x, "dir" : "","width":"16","height":"16"});
 
-					function chMovement(evt)
-					{
+					else if(evt.keyCode==39)
+						socket.emit("move", {"player":player.who, "x" : player.x, "dir" : "","width":"16","height":"16"});
 
-
-							if(player1!==undefined)
-						{
-							if(evt.keyCode==40)
-							{
-										socket.emit("move", {"player":player1.who, "y" : player1.y, "dir" : "","width":"16","height":"16"});
-										}
-						   else  if(evt.keyCode==38)
-							{
-										socket.emit("move", {"player":player1.who, "y" : player1.y, "dir" : "","width":"16","height":"16"});
-										}
-							else if(evt.keyCode==37)
-							{
-										socket.emit("move", {"player":player1.who, "x" : player1.x, "dir" : "","width":"16","height":"16"});
-							}
-							else if(evt.keyCode==39)
-							{
-										socket.emit("move", {"player":player1.who, "x" : player1.x, "dir" : "","width":"16","height":"16"});
-							}
-
-							else if(evt.keyCode==75)
-							{
-										socket.emit("move", {"player":player1.who, "x" : player1.x, "dir" : "","width":"16","height":"16"});
-							}
-										}
-
-						else if(player2!==undefined)
-						{
-							if(evt.keyCode==40)
-							{
-										socket.emit("move", {"player":player2.who, "y" : player2.y, "dir" : "","width":"16","height":"16"});
-										}
-						   else  if(evt.keyCode==38)
-							{
-										socket.emit("move", {"player":player2.who, "y" : player2.y, "dir" : "","width":"16","height":"16"});
-										}
-							else if(evt.keyCode==37)
-							{
-										socket.emit("move", {"player":player2.who, "x" : player2.x, "dir" : "","width":"16","height":"16"});
-							}
-							else if(evt.keyCode==39)
-							{
-										socket.emit("move", {"player":player2.who, "x" : player2.x, "dir" : "","width":"16","height":"16"});
-							}
-										}
-
-						else if(player3!==undefined)
-						{
-							if(evt.keyCode==40)
-							{
-										socket.emit("move", {"player":player3.who, "y" : player3.y, "dir" : "","width":"16","height":"16"});
-										}
-						   else  if(evt.keyCode==38)
-							{
-										socket.emit("move", {"player":player3.who, "y" : player3.y, "dir" : "","width":"16","height":"16"});
-										}
-							else if(evt.keyCode==37)
-							{
-										socket.emit("move", {"player":player3.who, "x" : player3.x, "dir" : "","width":"16","height":"16"});
-							}
-							else if(evt.keyCode==39)
-							{
-										socket.emit("move", {"player":player3.who, "x" : player3.x, "dir" : "","width":"16","height":"16"});
-							}
-										}
-
-											else if(player4!==undefined)
-						{
-							if(evt.keyCode==40)
-							{
-										socket.emit("move", {"player":player4.who, "y" : player4.y, "dir" : "","width":"16","height":"16"});
-										}
-						   else  if(evt.keyCode==38)
-							{
-										socket.emit("move", {"player":player4.who, "y" : player4.y, "dir" : "","width":"16","height":"16"});
-										}
-							else if(evt.keyCode==37)
-							{
-										socket.emit("move", {"player":player4.who, "x" : player4.x, "dir" : "","width":"16","height":"16"});
-							}
-							else if(evt.keyCode==39)
-							{
-										socket.emit("move", {"player":player4.who, "x" : player4.x, "dir" : "","width":"16","height":"16"});
-							}
-										}
-
-
-
-				}
+					else if(evt.keyCode==75)
+						socket.emit("move", {"player":player.who, "x" : player.x, "dir" : "","width":"16","height":"16"});
+			}
+		}
 
 
 					socket.on("gold", function(data)
@@ -398,7 +283,7 @@ function handleComplete() {
 
 									resus.splice(i,1);
 
-									$("#gold").html(++player1.gold);
+									$("#gold").html(++players[1].gold);
 
 
 
@@ -409,7 +294,7 @@ function handleComplete() {
 
 									resus.splice(i,1);
 
-									$("#gold").html(++player2.gold);
+									$("#gold").html(++players[2].gold);
 
 
 
@@ -421,7 +306,7 @@ function handleComplete() {
 
 									resus.splice(i,1);
 
-									$("#gold").html(++player3.gold);
+									$("#gold").html(++players[3].gold);
 
 
 
@@ -432,7 +317,7 @@ function handleComplete() {
 
 									resus.splice(i,1);
 
-									$("#gold").html(++player4.gold);
+									$("#gold").html(++players[4].gold);
 
 
 
@@ -646,34 +531,34 @@ function handleComplete() {
 		{
 		if(data["player"]=="first")
 		{
-		if(player1!==undefined)
+		if(players[1]!==undefined)
 		{
-		player1.value=data["value"];
-		$("#energy").val(player1.value);
+		players[1].value=data["value"];
+		$("#energy").val(players[1].value);
 		}
 		}
 		if(data["player"]=="second")
 		{
-		if(player2!==undefined)
+		if(players[2]!==undefined)
 		{
-		player2.value=data["value"];
-		$("#energy").val(player2.value);
+		players[2].value=data["value"];
+		$("#energy").val(players[2].value);
 		}
 		}
 		if(data["player"]=="third")
 		{
-		if(player3!==undefined)
+		if(players[3]!==undefined)
 		{
-		player3.value=data["value"];
-		$("#energy").val(player3.value);
+		players[3].value=data["value"];
+		$("#energy").val(players[3].value);
 		}
 		}
 		if(data["player"]=="fourth")
 		{
-		if(player4!==undefined)
+		if(players[4]!==undefined)
 		{
-		player4.value=data["value"];
-		$("#energy").val(player4.value);
+		players[4].value=data["value"];
+		$("#energy").val(players[4].value);
 		}
 		}
 		});
