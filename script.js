@@ -2,10 +2,7 @@ const energs=[];
 const obstacles=[];
 const resus=[];
 const grass= [];
-const clouds1=[];
-const clouds2=[];
-const clouds3=[];
-const clouds4=[];
+const clouds = [null, [],[],[],[]];
 let stage1;
 let stage2;
 let stage3;
@@ -14,6 +11,7 @@ let red;
 let blue;
 let green;
 let yellow;
+const fogs = [];
 const players = [];
 const socketPlayers = [];
 const englishToIndex = {
@@ -41,7 +39,7 @@ $(function()
 		
     
 function handleComplete() {
-	var socket = io.connect();
+	const socket = io.connect();
 	window["socket"] = socket;
 
 	socket.on("disconnect", function()
@@ -51,45 +49,30 @@ function handleComplete() {
 
 	socket.on("basa", function(data) {
 		   window["side"] = data["side"];
-		   basa = new Basa(window["side"], data["x"], data["y"],data["hert"]);
+		   basa = new Base(window["side"], data["x"], data["y"],data["hert"]);
 		   stage2.addChild(basa.playerImage);
 		   stage2.update();
 	});
 
+	const handleFog = function(index,data){
+		for(let i=0;i<data.length;i++) {
+			fogs[index] = new Fog( data[i]["x"], data[i]["y"],data[i]["hat"]);
+			clouds[index].push(fogs[index]);
+			stage3.addChild(fogs[index].fogImage);
+			stage3.update();
+		}
+	}
 	socket.on("fog1", function(data) {
-		for(var i=0;i<data.length;i++) {
-			fog1 = new Fog( data[i]["x"], data[i]["y"],data[i]["hat"]);
-			clouds1.push(fog1);
-			stage3.addChild(fog1.fogImage);
-			stage3.update();
-		}
+		handleFog(1,data);
 	});
-
 	socket.on("fog2", function(data) {
-		for(var i=0;i<data.length;i++) {
-			fog2 = new Fog( data[i]["x"], data[i]["y"],data[i]["hat"]);
-			clouds2.push(fog2);
-			stage3.addChild(fog2.fogImage);
-			stage3.update();
-		}
+		handleFog(2,data);
 	});
-
 	socket.on("fog3", function(data) {
-		for(var i=0;i<data.length;i++) {
-			fog3 = new Fog( data[i]["x"], data[i]["y"],data[i]["hat"]);
-			clouds3.push(fog3);
-			stage3.addChild(fog3.fogImage);
-			stage3.update();
-		}
+		handleFog(3,data);
 	});
-
 	socket.on("fog4", function(data) {
-		for(var i=0;i<data.length;i++) {
-			fog4 = new Fog( data[i]["x"], data[i]["y"],data[i]["hat"]);
-			clouds4.push(fog4);
-			stage3.addChild(fog4.fogImage);
-			stage3.update();
-		}
+		handleFog(4,data);
 	});
 
 	socket.on("enter", function(data) {
@@ -100,7 +83,6 @@ function handleComplete() {
 			stage2.update();
 		}
 	});
-
 
 	socket.on("enterThe", function(data) {
 		for(let h=0;h<data.length;h++) {
@@ -269,168 +251,43 @@ function handleComplete() {
 		}
 
 
-					socket.on("gold", function(data)
-				   {
-
-
-						for(var i=0;i<resus.length;i++)
-						{
-
-								if(data["player"]=="first" && data["hert"]==resus[i]["hert"])
-								{
-
-									stage2.removeChild(resus[i].resImage);
-
-									resus.splice(i,1);
-
-									$("#gold").html(++players[1].gold);
-
-
-
-								}
-								else if(data["player"]=="second" && data["hert"]==resus[i]["hert"])
-								{
-									stage2.removeChild(resus[i].resImage);
-
-									resus.splice(i,1);
-
-									$("#gold").html(++players[2].gold);
-
-
-
-								}
-
-								else if(data["player"]=="third" && data["hert"]==resus[i]["hert"])
-								{
-									stage2.removeChild(resus[i].resImage);
-
-									resus.splice(i,1);
-
-									$("#gold").html(++players[3].gold);
-
-
-
-								}
-								else if(data["player"]=="fourth" && data["hert"]==resus[i]["hert"])
-								{
-									stage2.removeChild(resus[i].resImage);
-
-									resus.splice(i,1);
-
-									$("#gold").html(++players[4].gold);
-
-
-
-								}
-								stage2.update();
-
-						}
-					});
-
-
-					socket.on("cleanFog", function(data)
-				   {
-						if(data["player"]=="first")
-						{
-						for(var i=0;i<clouds1.length;i++)
-						{
-
-								if( data["hat"]==clouds1[i]["hat"])
-								{
-
-									stage3.removeChild(clouds1[i].fogImage);
-
-									clouds1.splice(i,1);
-
-									stage3.update();
-
-
-
-								}
-
-
-							}
-
-
-
-						}
-							if(data["player"]=="second")
-						{
-						for(var i=0;i<clouds2.length;i++)
-						{
-
-								if( data["hat"]==clouds2[i]["hat"])
-								{
-
-									stage3.removeChild(clouds2[i].fogImage);
-
-									clouds2.splice(i,1);
-
-									stage3.update();
-
-
-
-								}
-
-
-							}
-
-
-
-						}
-
-							if(data["player"]=="third")
-						{
-						for(var i=0;i<clouds3.length;i++)
-						{
-
-								if( data["hat"]==clouds3[i]["hat"])
-								{
-
-									stage3.removeChild(clouds3[i].fogImage);
-
-									clouds3.splice(i,1);
-
-									stage3.update();
-
-
-
-								}
-
-
-							}
-
-
-
-						}
-
-							if(data["player"]=="fourth")
-						{
-						for(var i=0;i<clouds4.length;i++)
-						{
-
-								if( data["hat"]==clouds4[i]["hat"])
-								{
-
-									stage3.removeChild(clouds4[i].fogImage);
-
-									clouds4.splice(i,1);
-
-									stage3.update();
-
-
-
-								}
-
-
-							}
-
-
-
-						}
-
-
-					});
+		socket.on("gold", function(data) {
+			for(var i=0;i<resus.length;i++) {
+				if(data["player"]=="first" && data["hert"]==resus[i]["hert"]) {
+					stage2.removeChild(resus[i].resImage);
+					resus.splice(i,1);
+					$("#gold").html(++players[1].gold);
+				}
+				else if(data["player"]=="second" && data["hert"]==resus[i]["hert"]) {
+					stage2.removeChild(resus[i].resImage);
+					resus.splice(i,1);
+					$("#gold").html(++players[2].gold);
+				}
+				else if(data["player"]=="third" && data["hert"]==resus[i]["hert"]) {
+					stage2.removeChild(resus[i].resImage);
+					resus.splice(i,1);
+					$("#gold").html(++players[3].gold);
+				}
+				else if(data["player"]=="fourth" && data["hert"]==resus[i]["hert"]) {
+					stage2.removeChild(resus[i].resImage);
+					resus.splice(i,1);
+					$("#gold").html(++players[4].gold);
+				}
+				stage2.update();
+			}
+		});
+
+
+		socket.on("cleanFog", function(data) {
+			const cloud = clouds[englishToIndex[data['player']]];
+			for (let i = 0; i < cloud.length; i++) {
+				if (data["hat"] == cloud[i]["hat"]) {
+					stage3.removeChild(cloud[i].fogImage);
+					cloud.splice(i, 1);
+					stage3.update();
+				}
+			}
+		});
 
 
 
@@ -563,15 +420,6 @@ function handleComplete() {
 		}
 		});
 
-
-
-
-
-
-
-
-
-
 			for(row=0;row<25;row++)
 			{
 			for(col=0;col<25;col++)
@@ -596,137 +444,89 @@ function handleComplete() {
 
 
 	stage3.update();
-
 	stage2.update();
-
-
 	stage1.update();
 	}
 
 
 });
 
-function Basa(sd, x, y)
+function Base(sd, x, y)
 {
-	
-	
 	this.screenSide = sd;
-	
-	
-	
 	this.x = x;
 	this.y = y;
 	if(this.screenSide=="red")
-	{
-	this.playerImage = new createjs.Bitmap(queue.getResult("red"));
-	}
+		this.playerImage = new createjs.Bitmap(queue.getResult("red"));
 	else if(this.screenSide=="blue")
-	{
-	this.playerImage = new createjs.Bitmap(queue.getResult("blue"));
-	}
+		this.playerImage = new createjs.Bitmap(queue.getResult("blue"));
 	else if(this.screenSide=="yellow")
-	{
-	this.playerImage = new createjs.Bitmap(queue.getResult("yellow"));
-	}
-	
+		this.playerImage = new createjs.Bitmap(queue.getResult("yellow"));
 	else
-	{
-	
-	this.playerImage=new createjs.Bitmap(queue.getResult("green"));
-	}
+		this.playerImage=new createjs.Bitmap(queue.getResult("green"));
 	this.playerImage.x = this.x;
 	this.playerImage.y = this.y;
-	
 }
 
 
 
-function Player(id, sd, wh, x, y,g,v)
-{
-this.caxs=true;
-this.value=v;
-this.gold=g;
-this.hashiv=$("<div><img src='gui/resource/gold.png'><h1>"+"<span id ='gold'>0</span>"+"</h2></div>");
+function Player(id, sd, wh, x, y,g,v) {
+	this.caxs=true;
+	this.value=v;
+	this.gold=g;
+	this.hashiv=$("<div><img src='gui/resource/gold.png'><h1>"+"<span id ='gold'>0</span>"+"</h2></div>");
 	this.id = id;
 	this.energy=$("<meter id='energy' value="+v+" min='0' max='500'></meter>")
 	this.screenSide = sd;
-	
 	this.who = wh;
-	
 	this.x = x;
 	this.y = y;
 	if(this.screenSide=="red")
-	{
-	this.playerImage = new createjs.Bitmap(queue.getResult("re"));
-	}
+		this.playerImage = new createjs.Bitmap(queue.getResult("re"));
 	else if(this.screenSide=="blue")
-	{
-	this.playerImage = new createjs.Bitmap(queue.getResult("blu"));
-	}
+		this.playerImage = new createjs.Bitmap(queue.getResult("blu"));
 	else if(this.screenSide=="yellow")
-	{
-	this.playerImage = new createjs.Bitmap(queue.getResult("yell"));
-	}
-	
+		this.playerImage = new createjs.Bitmap(queue.getResult("yell"));
 	else
-	{
-	
-	this.playerImage=new createjs.Bitmap(queue.getResult("gre"));
-	}
+		this.playerImage=new createjs.Bitmap(queue.getResult("gre"));
 	this.playerImage.x = this.x;
 	this.playerImage.y = this.y;
 	
 }
-
-
 function Res( x, y,ht)
 {
-	
-this.hert=ht;
+	this.hert=ht;
 	this.x = x;
 	this.y = y;
-	
 	this.resImage = new createjs.Bitmap(queue.getResult("res"));
-	
 	this.resImage.x = this.x;
 	this.resImage.y = this.y;
 }
 
 function Sto( x, y)
 {
-	
-
 	this.x = x;
 	this.y = y;
-	
 	this.stoImage = new createjs.Bitmap(queue.getResult("stone"));
-	
 	this.stoImage.x = this.x;
 	this.stoImage.y = this.y;
 }
 
-
 function Power(x, y,ht)
 {
 	this.hert=ht;
-
 	this.x = x;
 	this.y = y;
-	
 	this.powImage = new createjs.Bitmap(queue.getResult("energy"));
-	
 	this.powImage.x = this.x;
 	this.powImage.y = this.y;
 }
 function Fog(x,y,ht)
 {
 	this.hat=ht;
-
 	this.x = x;
 	this.y = y;
-	
 	this.fogImage = new createjs.Bitmap(queue.getResult("fog"));
-	
 	this.fogImage.x = this.x;
 	this.fogImage.y = this.y;
 }
