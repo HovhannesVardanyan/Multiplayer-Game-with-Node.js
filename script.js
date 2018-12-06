@@ -11,6 +11,7 @@ let red;
 let blue;
 let green;
 let yellow;
+let canPlay = true;
 const fogs = [];
 const players = [];
 const socketPlayers = [];
@@ -26,8 +27,7 @@ $(function() {
 	stage3 = new createjs.Stage("fog");
 	queue=new createjs.LoadQueue(true);
 	queue.addEventListener("complete",handleComplete);
-	queue.loadManifest
-	(
+	queue.loadManifest(
 		[	{id:"grass",src:"/gui/terrain/grass.png"},{id:"red",src:"/gui/camp/red.png"},{id:"blue",src:"/gui/camp/blue.png"},
 			{id:"yellow",src:"/gui/camp/yellow.png"},{id:"green",src:"/gui/camp/green.png"},{id:"blu",src:"/gui/truck/blue.png"},
 			{id:"gre",src:"/gui/truck/green.png"},{id:"re",src:"/gui/truck/red.png"},{id:"yell",src:"/gui/truck/yellow.png"},
@@ -39,7 +39,8 @@ $(function() {
 		const socket = io.connect();
 		window["socket"] = socket;
 		socket.on("disconnect", function() {
-			window.location.reload();
+			if(canPlay)
+				window.location.reload();
 		});
 		socket.on("basa", function(data) {
 			   window["side"] = data["side"];
@@ -136,9 +137,19 @@ $(function() {
 			stage2.addChild(socketPlayers[4].playerImage);
 			stage2.update();
 		});
-		//code to be added
-		window.addEventListener("keydown",movement);
-		window.addEventListener("keyup", chMovement);
+		socket.on('No place to play',function(data){
+			canPlay = false;
+			socket.disconnect();
+			alert("No place to play");
+		});
+
+		socket.on("Game Started",function(data){
+			alert("Game Started");
+			window.addEventListener("keydown",movement);
+			window.addEventListener("keyup", chMovement);
+		});
+
+
 		socket.on("someOneMove", function(data) {
 			const player = players[englishToIndex[data["player"]]];
 			const socketPlayer = socketPlayers[englishToIndex[data["player"]]];
