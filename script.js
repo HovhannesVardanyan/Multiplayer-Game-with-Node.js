@@ -15,24 +15,41 @@ let canPlay = true;
 const fogs = [];
 const players = [];
 const socketPlayers = [];
-const englishToIndex = {
+const englishToIndexMap = {
 	"first" : "1",
 	"second" : "2",
 	"third" : "3",
 	"fourth" : "4"
 };
+const indexToColorMap = {
+	"1" : "red",
+	"2" : "green",
+	"3" : "yellow",
+	"4" : "blue"
+};
+const images = {'blue' : {}, 'red' : {}, 'yellow' : {}, 'green' : {}};
+const directions = ['left', 'right', 'up','down'];
 $(function() {
+	const constructImages = function(){
+		for(let i = 1; i <= 4; i++){
+
+		}
+	};
+
+
+
+
 	stage1=new createjs.Stage("background");
 	stage2=new createjs.Stage("arena");
 	stage3 = new createjs.Stage("fog");
 	queue=new createjs.LoadQueue(true);
 	queue.addEventListener("complete",handleComplete);
 	queue.loadManifest(
-		[	{id:"grass",src:"/gui/terrain/grass.png"},{id:"red",src:"/gui/camp/red.png"},{id:"blue",src:"/gui/camp/blue.png"},
+		[	{id:"grass",src:"/gui/terrain/grass.png"},{id:"red",src:"/gui/camp/red.png"}, {id:"blue",src:"/gui/camp/blue.png"},
 			{id:"yellow",src:"/gui/camp/yellow.png"},{id:"green",src:"/gui/camp/green.png"},{id:"blu",src:"/gui/truck/blue.png"},
 			{id:"gre",src:"/gui/truck/green.png"},{id:"re",src:"/gui/truck/red.png"},{id:"yell",src:"/gui/truck/yellow.png"},
 			{id:"stone",src:"/gui/obstacle/default.png"},{id:"res",src:"/gui/resource/gold.png"},{id:"energy",src:"/gui/resource/power.png"},
-			{id:"fog",src:"/gui/fog.png"}
+			{id:"fog",src:"/gui/fog.png"},
 			]
 	);
 	function handleComplete() {
@@ -151,16 +168,22 @@ $(function() {
 
 
 		socket.on("someOneMove", function(data) {
-			const player = players[englishToIndex[data["player"]]];
-			const socketPlayer = socketPlayers[englishToIndex[data["player"]]];
+			const player = players[englishToIndexMap[data["player"]]];
+			const socketPlayer = socketPlayers[englishToIndexMap[data["player"]]];
 			if(player!==undefined) {
 				player.value=data["value"];
 				$("#energy").val(player.value);
+				stage2.removeChild(player.playerImage);
+				player.playerImage = new createjs.Bitmap('gui/' + indexToColorMap[englishToIndexMap[data['player']]] + '/' + data['direction'] + '.png');
+				stage2.addChild(player.playerImage);
 				player.playerImage.y = data["y"];
 				player.playerImage.x = data["x"];
 				stage2.update();
 			}
 			else {
+				stage2.removeChild(socketPlayer.playerImage);
+				socketPlayer.playerImage = new createjs.Bitmap('gui/' + indexToColorMap[englishToIndexMap[data['player']]] + '/' + data['direction'] + '.png');
+				stage2.addChild(socketPlayer.playerImage);
 				socketPlayer.playerImage.x = data["x"];
 				socketPlayer.playerImage.y = data["y"];
 				stage2.update();
@@ -213,31 +236,33 @@ $(function() {
 				throw new Error("Something went wrong!");
 			if(player!==undefined) {
 				if(evt.keyCode===40)
-					socket.emit("move", {"player":player.who, "y" : player.y, "dir" : "","width":"16","height":"16"});
+					socket.emit("move", {"player":player.who, "y" : player.y, "dir" : "down","width":"16","height":"16"});
 				else  if(evt.keyCode===38)
-					socket.emit("move", {"player":player.who, "y" : player.y, "dir" : "","width":"16","height":"16"});
+					socket.emit("move", {"player":player.who, "y" : player.y, "dir" : "up","width":"16","height":"16"});
 
 				else if(evt.keyCode===37)
-					socket.emit("move", {"player":player.who, "x" : player.x, "dir" : "","width":"16","height":"16"});
+					socket.emit("move", {"player":player.who, "x" : player.x, "dir" : "left","width":"16","height":"16"});
 
 				else if(evt.keyCode===39)
-					socket.emit("move", {"player":player.who, "x" : player.x, "dir" : "","width":"16","height":"16"});
+					socket.emit("move", {"player":player.who, "x" : player.x, "dir" : "right","width":"16","height":"16"});
 
 				else if(evt.keyCode===75)
 					socket.emit("move", {"player":player.who, "x" : player.x, "dir" : "","width":"16","height":"16"});
 			}
 		}
 		socket.on("gold", function(data) {
-			const player = players[englishToIndex[data['player']]];
-			for(let i=0;i<resus.length;i++) {
-				stage2.removeChild(resus[i].resImage);
-				resus.splice(i,1);
-				$("#gold").html(++player.gold);
-				stage2.update();
-			}
+			const player = players[englishToIndexMap[data['player']]];
+			for(let i=0;i<resus.length;i++)
+			    if(resus[i].x === data['x'] && resus[i].y === data['y']) {
+                    stage2.removeChild(resus[i].resImage);
+                    resus.splice(i, 1);
+                    $("#gold").html(++player.gold);
+                    stage2.update();
+                    break;
+                }
 		});
 		socket.on("cleanFog", function(data) {
-			const cloud = clouds[englishToIndex[data['player']]];
+			const cloud = clouds[englishToIndexMap[data['player']]];
 			for (let i = 0; i < cloud.length; i++) {
 				if (data["hat"] === cloud[i]["hat"]) {
 					stage3.removeChild(cloud[i].fogImage);
@@ -287,7 +312,7 @@ $(function() {
 			}
 		});
 		socket.on("gen",function(data) {
-			const player = players[englishToIndex[data['player']]];
+			const player = players[englishToIndexMap[data['player']]];
 			if(player !== undefined) {
 				player.value=data["value"];
 				$("#energy").val(player.value);

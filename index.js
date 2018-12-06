@@ -244,10 +244,10 @@ io.sockets.on('connection', function(socket) {
 					players[tmp]["value"]-=5;
 
 				if(players[tmp]["value"]<4) {
-					col=true;
-					colr=true;
-					coll=true;
-					colu=true;
+					col = true;
+					colr = true;
+					coll = true;
+					colu = true;
 				}
 
 				for(let h=0;h<chures.length;h++) {
@@ -260,8 +260,8 @@ io.sockets.on('connection', function(socket) {
 								players[tmp]["value"]+=250;
 
 							else if(players[tmp]["value"]>250) {
-								const tarb=500-players[tmp]["value"];
-								players[tmp]["value"]+=tarb;
+								const dif=500-players[tmp]["value"];
+								players[tmp]["value"]+=dif;
 							}
 							socket.broadcast.emit("BatteryStolen",chures[h]);
 							chures.splice(h,1);
@@ -273,7 +273,8 @@ io.sockets.on('connection', function(socket) {
 						const distancex=Math.abs(chores[i]["x"]-parseInt(players[tmp]["x"]));
 						const distancey=Math.abs(chores[i]["y"]-parseInt(players[tmp]["y"]));
 						if(distancex<=28&&distancey<=28) {
-							socket.emit("gold",{"hert":chores[i]["hert"],"player":players[tmp]["player"]});
+							//console.log(players[tmp]["player"] + "  hitted  " + chores[i]);
+							socket.emit("gold",{"x" : chores[i]['x'], "y" : chores[i]['y'],"player":players[tmp]["player"]});
 							socket.broadcast.emit("GoldStolen",chores[i]);
 							chores.splice(i,1);
 						}
@@ -441,17 +442,11 @@ io.sockets.on('connection', function(socket) {
 					if(players[tmp]["x"]===766||players[tmp]["y"]<60&&players[tmp]["x"]>709||players[tmp]["x"]>710&&players[tmp]["y"]>710)
 						 colr=true;
 
-
-
-
 					if(colr||players[tmp]["x"]===766||players[tmp]["y"]<60&&players[tmp]["x"]>709||players[tmp]["x"]>710&&players[tmp]["y"]>710)
 						players[tmp]["x"] -= 5;
 
-
-
-
-
 				}
+				players[tmp].direction = data['dir'];
 
 				io.sockets.emit("someOneMove", players[tmp]);
 				col=false;
