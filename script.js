@@ -32,12 +32,13 @@ const directions = ['left', 'right', 'up','down'];
 $(function() {
 	const constructImages = function(){
 		for(let i = 1; i <= 4; i++){
-
+			for(const dir of directions){
+				images[indexToColorMap[i]][dir] = new createjs.Bitmap('gui/' + indexToColorMap[i] + '/' + dir + '.png');
+			}
 		}
 	};
 
-
-
+	constructImages();
 
 	stage1=new createjs.Stage("background");
 	stage2=new createjs.Stage("arena");
@@ -174,7 +175,7 @@ $(function() {
 				player.value=data["value"];
 				$("#energy").val(player.value);
 				stage2.removeChild(player.playerImage);
-				player.playerImage = new createjs.Bitmap('gui/' + indexToColorMap[englishToIndexMap[data['player']]] + '/' + data['direction'] + '.png');
+				player.playerImage = images[indexToColorMap[englishToIndexMap[data['player']]]][data['direction']];
 				stage2.addChild(player.playerImage);
 				player.playerImage.y = data["y"];
 				player.playerImage.x = data["x"];
@@ -182,7 +183,7 @@ $(function() {
 			}
 			else {
 				stage2.removeChild(socketPlayer.playerImage);
-				socketPlayer.playerImage = new createjs.Bitmap('gui/' + indexToColorMap[englishToIndexMap[data['player']]] + '/' + data['direction'] + '.png');
+				socketPlayer.playerImage = images[indexToColorMap[englishToIndexMap[data['player']]]][data['direction']];
 				stage2.addChild(socketPlayer.playerImage);
 				socketPlayer.playerImage.x = data["x"];
 				socketPlayer.playerImage.y = data["y"];
