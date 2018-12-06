@@ -270,10 +270,8 @@ io.sockets.on('connection', function(socket) {
 
 				if(tru) {
 					for(let i=0;i<chores.length;i++) {
-
 						const distancex=Math.abs(chores[i]["x"]-parseInt(players[tmp]["x"]));
 						const distancey=Math.abs(chores[i]["y"]-parseInt(players[tmp]["y"]));
-
 						if(distancex<=28&&distancey<=28) {
 							socket.emit("gold",{"hert":chores[i]["hert"],"player":players[tmp]["player"]});
 							socket.broadcast.emit("GoldStolen",chores[i]);
@@ -310,24 +308,18 @@ io.sockets.on('connection', function(socket) {
 
 						}
 					}
-
-					 for(let i=0;i<chires.length;i++) {
-						 const distancex=Math.abs(chires[i].x-parseInt(players[tmp]["x"]));
-						 const distancey=Math.abs(chires[i].y-parseInt(players[tmp]["y"]));
-						 if(distancex<=26&&distancey<=26) {
-								players[tmp]["y"] += 0;
+					for(let i=0;i<chires.length;i++) {
+						const distancex=Math.abs(chires[i].x-parseInt(players[tmp]["x"]));
+						const distancey=Math.abs(chires[i].y-parseInt(players[tmp]["y"]));
+						if(distancex<=26&&distancey<=26) {
+							players[tmp]["y"] += 0;
 								col=true;
-						 }
-					 }
-
-
-
-
-
-					 if(col||players[tmp]["y"]===766||players[tmp]["y"]===769||players[tmp]["y"]>710&&players[tmp]["x"]<54||
-						 players[tmp]["x"]>710&&players[tmp]["y"]>710) {
+						}
+					}
+					if(col||players[tmp]["y"]===766||players[tmp]["y"]===769||players[tmp]["y"]>710&&players[tmp]["x"]<54||
+						 players[tmp]["x"]>710&&players[tmp]["y"]>710)
 							players[tmp]["y"] -= 5;
-					 }
+
 				}
 
 				else if(data["dir"] === "up") {
@@ -476,7 +468,6 @@ io.sockets.on('connection', function(socket) {
 		for(const lm in players) {
 			if(players[lm]["value"]<=496)
 				players[lm]["value"]+=4;
-
 			else if(players[lm]["value"]>496) {
 				const tar=500-players[lm]["value"];
 				players[lm]["value"]+=tar
