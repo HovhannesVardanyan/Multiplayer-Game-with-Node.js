@@ -37,9 +37,7 @@ $(function() {
 			}
 		}
 	};
-
 	constructImages();
-
 	stage1=new createjs.Stage("background");
 	stage2=new createjs.Stage("arena");
 	stage3 = new createjs.Stage("fog");

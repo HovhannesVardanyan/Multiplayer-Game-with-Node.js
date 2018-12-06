@@ -200,6 +200,7 @@ io.sockets.on('connection', function(socket) {
 			"y":y
 		});
 		socket.emit("fog4", fogs[4]);
+
 		io.sockets.emit("Game Started");
 	}
 	socket.emit("ente",chures);

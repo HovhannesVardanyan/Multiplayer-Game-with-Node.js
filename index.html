@@ -1,19 +1,25 @@
 <html>
-<head>
-<style>
-body{background:#FFF;}
-canvas{position:absolute;top:100;left:600;border:#000 1px solid;}
-.clean{opacity:0;}
-</style>
-</head>
-<body>
+    <head>
+    <style>
+        body{
+            background-image: url("gui/terrain/background.jpg");
+            background-repeat: repeat;
+        }
+        canvas{position:absolute;top:100;left:600;border:#000 1px solid;}
+        .clean{opacity:0;}
+        #gold{
+            color : #ffc520;
+        }
+    </style>
+    </head>
+    <body>
 
-<canvas id="background" width="800" height="800"></canvas>
-<canvas id="arena" width="800" height="800"></canvas>
-<canvas id="fog" width="800" height="800"></canvas>
-<script src="create.js"></script>
-<script src="jquery.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="script.js"></script>
-</body>
+        <canvas id="background" width="800" height="800"></canvas>
+        <canvas id="arena" width="800" height="800"></canvas>
+        <canvas id="fog" width="800" height="800"></canvas>
+        <script src="create.js"></script>
+        <script src="jquery.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="script.js"></script>
+    </body>
 </html>
