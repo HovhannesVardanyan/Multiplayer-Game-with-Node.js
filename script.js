@@ -64,7 +64,6 @@ $(function() {
 		});
 		socket.on("basa", function(data) {
 			   window["side"] = data["side"];
-			   ;
 			   while(name === "" || name === undefined || name === null)
                    name = prompt("Please enter your name");
 			   basa = new Base(window["side"], data["x"], data["y"],data["hert"]);
@@ -331,6 +330,8 @@ $(function() {
 		});
 		socket.on('Game Over',function(data){
 			const endGame = function()	{
+				canPlay = false;
+				socket.emit('game ended');
 				let index = 1;
 				for(let i = 1;i <= 4; i++)
 					if(players[i] !== undefined)
@@ -342,11 +343,7 @@ $(function() {
 						text += " (you)";
 					text += "\n";
 				}
-				console.log(text);
-				console.log(JSON.stringify(data));
 				alert(text);
-				canPlay = false;
-				socket.emit('game ended');
 				socket.disconnect();
 			};
 			setTimeout(function(){
@@ -356,7 +353,7 @@ $(function() {
 					endGame();
 			},0);
 		});
-		for(let row=0;row<25;row++) {
+		for(let row=0;row<35;row++) {
 			for(let col=0;col<25;col++) {
 				const pic=new createjs.Bitmap(queue.getResult("grass"));
 				pic.x = row*32;

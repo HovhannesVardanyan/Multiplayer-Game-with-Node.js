@@ -121,7 +121,7 @@ if(cluster.isMaster){
 		}
 	}
 
-	for (let h = 0; h < 21; h++) {
+	for (let h = 0; h < 59; h++) {
 		const element = Math.floor(Math.random() * 400);
 		const energy = Math.floor(Math.random() * 400);
 		const index = Math.floor(Math.random() * 400);
