@@ -12,6 +12,7 @@ let blue;
 let green;
 let yellow;
 let canPlay = true;
+
 const fogs = [];
 const players = [];
 const socketPlayers = [];
@@ -77,6 +78,7 @@ $(function() {
 				stage3.addChild(fogs[index].fogImage);
 				stage3.update();
 			}
+			socket.emit('Ready to start');
 		};
 		socket.on("fog1", function(data) {
 			handleFog(1,data);
@@ -89,7 +91,6 @@ $(function() {
 		});
 		socket.on("fog4", function(data) {
 			handleFog(4,data);
-			socket.emit('Ready to start');
 		});
 		socket.on("enter", function(data) {
 			for(let i=0;i<data.length;i++) {

@@ -8,6 +8,7 @@ if(cluster.isMaster){
 	});
 } else {
 	let die = 0;
+	let start = 0;
 	const golds = [];
 	const bats = [];
 	let col = false;
@@ -120,7 +121,7 @@ if(cluster.isMaster){
 		}
 	}
 
-	for (let h = 0; h < 15; h++) {
+	for (let h = 0; h < 21; h++) {
 		const element = Math.floor(Math.random() * 400);
 		const energy = Math.floor(Math.random() * 400);
 		const index = Math.floor(Math.random() * 400);
@@ -220,7 +221,9 @@ if(cluster.isMaster){
 		socket.emit("enterThe", chores);
 		socket.emit("enter", chires);
 		socket.on('Ready to start', function () {
-			io.sockets.emit("Game Started");
+			start++;
+			if(start === 4)
+				io.sockets.emit("Game Started");
 		});
 		socket.on('newPlayerCreated', function (data) {
 			players.push({
@@ -498,8 +501,8 @@ if(cluster.isMaster){
 
 		function gen() {
 			for (const lm in players) {
-				if (players[lm]["value"] <= 496)
-					players[lm]["value"] += 4;
+				if (players[lm]["value"] <= 120)
+					players[lm]["value"] += 25;
 				else if (players[lm]["value"] > 496) {
 					const tar = 500 - players[lm]["value"];
 					players[lm]["value"] += tar
