@@ -208,7 +208,8 @@ io.sockets.on('connection', function(socket) {
 	socket.emit("enter", chires);
 
 	socket.on('newPlayerCreated', function(data) {
-		players.push({"id":data["id"], "x":data["x"], "y":data["y"], "side":data["side"], "player":data["player"],"value":data["value"]});
+		players.push({"id":data["id"],"name" : data["name"], "x":data["x"], "y":data["y"], "side":data["side"], "player":data["player"],"value":data["value"]});
+
 		if(data["player"] === "second") {
 			socket.emit("firstPosition",players[0]);
 			socket.broadcast.emit("newPlayer", data);
@@ -456,8 +457,6 @@ io.sockets.on('connection', function(socket) {
 				colu=false;
 				players[tmp]["caxs"]=true;
 			}
-
-
 		}
 	});
 	function gen() {

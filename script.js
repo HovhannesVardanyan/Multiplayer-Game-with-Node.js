@@ -30,6 +30,9 @@ const indexToColorMap = {
 const images = {'blue' : {}, 'red' : {}, 'yellow' : {}, 'green' : {}};
 const directions = ['left', 'right', 'up','down'];
 $(function() {
+
+    let name = null;
+
 	const constructImages = function(){
 		for(let i = 1; i <= 4; i++){
 			for(const dir of directions){
@@ -60,6 +63,8 @@ $(function() {
 		});
 		socket.on("basa", function(data) {
 			   window["side"] = data["side"];
+			   while(name === "" || name === undefined || name === null)
+                   name = prompt("Please enter your name");
 			   basa = new Base(window["side"], data["x"], data["y"],data["hert"]);
 			   stage2.addChild(basa.playerImage);
 			   stage2.update();
@@ -111,13 +116,16 @@ $(function() {
 		const createPlayer = function(index,data){
 			window["side"] = data["side"];
 			players[index] = new Player(data["name"], window["side"], data["player"], data["x"], data["y"],0,500);
+			players[index].name = name;
 			$("body").append(players[index].energy);
 			$("body").append(players[index].hashiv);
 			stage2.addChild(players[index].playerImage);
 			socket.emit("newPlayerCreated", {"id":players[index].id, "x":players[index].x, "y":players[index].y,
-				"side":players[index].screenSide, "player":players[index].who,"value":players[index].value});
+				"side":players[index].screenSide, "player":players[index].who,"value":players[index].value,
+                "name" : players[index].name
+            });
 			stage2.update();
-		}
+		};
 		socket.on("1", function(data) {
 			createPlayer(1,data);
 		});
@@ -137,19 +145,20 @@ $(function() {
 		});
 		socket.on("newPlayer", function(data) {
 			window["side"] = data["side"];
-			socketPlayers[2] = new Player(data["id"], window["side"], data["player"], data["x"], data["y"],data["width"]);
+            socketPlayers[2] = new Player(data["id"], window["side"], data["player"], data["x"], data["y"],data["width"]);
 			stage2.addChild(socketPlayers[2].playerImage);
 			stage2.update();
 		});
 		socket.on("soc", function(data) {
 			window["side"] = data["side"];
-			socketPlayers[3] = new Player(data["name"], window["side"], data["player"], data["x"], data["y"],data["width"]);
+            socketPlayers[3] = new Player(data["name"], window["side"], data["player"], data["x"], data["y"],data["width"]);
 			stage2.addChild(socketPlayers[3].playerImage);
 			stage2.update();
 		});
 		socket.on("joke", function(data) {
 			window["side"] = data["side"];
-			socketPlayers[4] = new Player(data["name"], window["side"], data["player"], data["x"], data["y"],data["width"]);
+
+            socketPlayers[4] = new Player(data["name"], window["side"], data["player"], data["x"], data["y"],data["width"]);
 			stage2.addChild(socketPlayers[4].playerImage);
 			stage2.update();
 		});
@@ -270,6 +279,7 @@ $(function() {
 				}
 			}
 		});
+
 		socket.on("GoldStolen",function(data) {
 			for(let i=0;i<resus.length;i++) {
 				if(data["hert"]===resus[i]["hert"]) {
@@ -352,7 +362,7 @@ function Player(id, sd, wh, x, y,g,v) {
 	this.caxs=true;
 	this.value=v;
 	this.gold=g;
-	this.hashiv=$("<div><img src='gui/resource/gold.png'><h1>"+"<span id ='gold'>0</span>"+"</h2></div>");
+	this.hashiv=$("<div><img id = 'gold_coin' src='gui/resource/gold_logo.png'>"+"<span id ='gold'>0</span>"+"</div>");
 	this.id = id;
 	this.energy=$("<meter id='energy' value="+v+" min='0' max='500'></meter>")
 	this.screenSide = sd;
