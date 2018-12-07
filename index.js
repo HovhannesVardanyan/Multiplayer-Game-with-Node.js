@@ -111,7 +111,7 @@ for(let col=4;col<23;col++) {
 	}
 }
 
-for(let h=0;h<11;h++) {
+for(let h=0;h<15;h++) {
 	const element=Math.floor(Math.random()*400);
 	const energy=Math.floor(Math.random()*400);
 	const index=Math.floor(Math.random()*400);
@@ -280,13 +280,12 @@ io.sockets.on('connection', function(socket) {
 					for(let i=0;i<chores.length;i++) {
 						const distancex=Math.abs(chores[i]["x"]-parseInt(players[tmp]["x"]));
 						const distancey=Math.abs(chores[i]["y"]-parseInt(players[tmp]["y"]));
-						if(distancex<=28&&distancey<=28) {
+						if(distancex<=31&&distancey<=31) {
 							players[tmp].score++;
 							socket.emit("gold",{"x" : chores[i]['x'], "y" : chores[i]['y'],"player":players[tmp]["player"]});
 							socket.broadcast.emit("GoldStolen",chores[i]);
 							chores.splice(i,1);
 							if(chores.length === 0) {
-
 								io.sockets.emit('Game Over', [
 									{
 										name : players[0].name,
@@ -294,8 +293,8 @@ io.sockets.on('connection', function(socket) {
 										id : 0
 									},
 									{name : players[1].name, score : players[1].score, id : 1},
-									{name : players[3].name, score : players[3].score, id : 2},
-									{name : players[2].name, score : players[2].score, id : 3},
+									{name : players[2].name, score : players[2].score, id : 2},
+									{name : players[3].name, score : players[3].score, id : 3},
 
 								].sort(function(a,b) {
 									return a.score <= b.score

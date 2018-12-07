@@ -417,6 +417,8 @@ function Res( x, y,ht) {
 	this.x = x;
 	this.y = y;
 	this.resImage = new createjs.Bitmap(queue.getResult("res"));
+	this.resImage.scaleX = 1.15;
+	this.resImage.scaleY = 1.15;
 	this.resImage.x = this.x;
 	this.resImage.y = this.y;
 }
