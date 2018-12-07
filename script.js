@@ -88,6 +88,7 @@ $(function() {
 		});
 		socket.on("fog4", function(data) {
 			handleFog(4,data);
+			socket.emit('Ready to start');
 		});
 		socket.on("enter", function(data) {
 			for(let i=0;i<data.length;i++) {
@@ -326,6 +327,24 @@ $(function() {
 				player.value=data["value"];
 				$("#energy").val(player.value);
 			}
+		});
+		socket.on('Game Over',function(data){
+			const endGame = function(){
+				console.log('game over');
+				let text = "Game Over ! \n";
+				for (const player of data) {
+					text += player.name + ' - ' + player.score + "\n";
+				}
+				canPlay = false;
+				alert(text);
+				socket.disconnect();
+			};
+			setTimeout(function(){
+				if(resus.length !== 0)
+					setTimeout(endGame,0);
+				else
+					endGame();
+			},0);
 		});
 		for(let row=0;row<25;row++) {
 			for(let col=0;col<25;col++) {

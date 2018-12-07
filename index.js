@@ -5,12 +5,12 @@ let colr=false;
 let coll=false;
 let colu=false;
 const stones=[];
-const sckt = [];
-const players = [];
-const chires=[];
+let sckt = [];
+let players = [];
+let chires=[];
 let tru = true;
 let player;
-const fogs = [null,[],[],[],[]];
+let fogs = [null,[],[],[],[]];
 let hat=0;
 let hert=0;
 const chores=[];
@@ -103,9 +103,9 @@ for(let col=4;col<23;col++) {
 		stones.push(obstacle);
 		++hert;
 	}
-
 }
-for(let h=0;h<10;h++) {
+
+for(let h=0;h<11;h++) {
 	const element=Math.floor(Math.random()*400);
 	const energy=Math.floor(Math.random()*400);
 	const index=Math.floor(Math.random()*400);
@@ -200,15 +200,15 @@ io.sockets.on('connection', function(socket) {
 			"y":y
 		});
 		socket.emit("fog4", fogs[4]);
-
-		io.sockets.emit("Game Started");
 	}
 	socket.emit("ente",chures);
 	socket.emit("enterThe", chores);
 	socket.emit("enter", chires);
-
+	socket.on('Ready to start',function(){
+		io.sockets.emit("Game Started");
+	});
 	socket.on('newPlayerCreated', function(data) {
-		players.push({"id":data["id"],"name" : data["name"], "x":data["x"], "y":data["y"], "side":data["side"], "player":data["player"],"value":data["value"]});
+		players.push({'score' : 0,"id":data["id"],"name" : data["name"], "x":data["x"], "y":data["y"], "side":data["side"], "player":data["player"],"value":data["value"]});
 
 		if(data["player"] === "second") {
 			socket.emit("firstPosition",players[0]);
@@ -275,10 +275,21 @@ io.sockets.on('connection', function(socket) {
 						const distancex=Math.abs(chores[i]["x"]-parseInt(players[tmp]["x"]));
 						const distancey=Math.abs(chores[i]["y"]-parseInt(players[tmp]["y"]));
 						if(distancex<=28&&distancey<=28) {
-							//console.log(players[tmp]["player"] + "  hitted  " + chores[i]);
+							players[tmp].score++;
 							socket.emit("gold",{"x" : chores[i]['x'], "y" : chores[i]['y'],"player":players[tmp]["player"]});
 							socket.broadcast.emit("GoldStolen",chores[i]);
 							chores.splice(i,1);
+							if(chores.length === 0) {
+								io.sockets.emit('Game Over', [
+									{name : players[0].name, score : players[0].score},
+									{name : players[1].name, score : players[1].score},
+									{name : players[2].name, score : players[2].score},
+									{name : players[2].name, score : players[2].score}
+								].sort(function(a,b) {
+									return a.score <= b.score
+								}));
+								// terminate here
+							}
 						}
 					}
 				}
@@ -306,7 +317,7 @@ io.sockets.on('connection', function(socket) {
 						const  distancex=Math.abs(players[2].x-parseInt(players[i]["x"]));
 						const distancey=Math.abs(players[2].y-parseInt(players[i]["y"]));
 						if(distancex<=28&&distancey<=28) {
-								if(data["player"]===players[2]["player"]||data["player"]===players[i]["player"])
+							if(data["player"]===players[2]["player"]||data["player"]===players[i]["player"])
 								col=true;
 
 						}
@@ -449,7 +460,6 @@ io.sockets.on('connection', function(socket) {
 
 				}
 				players[tmp].direction = data['dir'];
-
 				io.sockets.emit("someOneMove", players[tmp]);
 				col=false;
 				colr=false;
