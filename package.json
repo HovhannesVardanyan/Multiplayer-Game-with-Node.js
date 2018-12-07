@@ -1,0 +1,23 @@
+{
+  "name": "cs-project",
+  "version": "1.0.0",
+  "description": "My final project of Intro to CS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HovhannesVardanyan/Multiplayer-Game-with-Node.js.git"
+  },
+  "author": "Hovhannes Vardanyan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HovhannesVardanyan/Multiplayer-Game-with-Node.js/issues"
+  },
+  "homepage": "https://github.com/HovhannesVardanyan/Multiplayer-Game-with-Node.js#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "socket.io": "^2.2.0"
+  }
+}
