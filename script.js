@@ -63,6 +63,7 @@ $(function() {
 		});
 		socket.on("basa", function(data) {
 			   window["side"] = data["side"];
+			   ;
 			   while(name === "" || name === undefined || name === null)
                    name = prompt("Please enter your name");
 			   basa = new Base(window["side"], data["x"], data["y"],data["hert"]);
@@ -158,7 +159,6 @@ $(function() {
 		});
 		socket.on("joke", function(data) {
 			window["side"] = data["side"];
-
             socketPlayers[4] = new Player(data["name"], window["side"], data["player"], data["x"], data["y"],data["width"]);
 			stage2.addChild(socketPlayers[4].playerImage);
 			stage2.update();
@@ -329,12 +329,24 @@ $(function() {
 			}
 		});
 		socket.on('Game Over',function(data){
-			const endGame = function(){
-				console.log('game over');
+			const endGame = function()	{
+				let index = 1;
+				for(let i = 1;i <= 4; i++)
+					if(players[i] !== undefined)
+						index = i - 1;
+				console.log(index + "player ends the game");
+
+
 				let text = "Game Over ! \n";
-				for (const player of data) {
-					text += player.name + ' - ' + player.score + "\n";
+
+				for(const item of data){
+					text += item.name + ' - ' + item.score;
+					if(item.id === index)
+						text += " (you)";
+					text += "\n";
 				}
+				console.log(text);
+				console.log(JSON.stringify(data));
 				canPlay = false;
 				alert(text);
 				socket.disconnect();

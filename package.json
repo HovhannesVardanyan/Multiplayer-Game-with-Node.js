@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/HovhannesVardanyan/Multiplayer-Game-with-Node.js#readme",
   "dependencies": {
+    "cluster": "^0.7.7",
     "express": "^4.16.4",
     "socket.io": "^2.2.0"
   }

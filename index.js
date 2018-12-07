@@ -41,6 +41,12 @@ const englishToIndex = {
 	"third" : "3",
 	"fourth" : "4"
 };
+const indexToColorMap = {
+	"1" : "red",
+	"2" : "green",
+	"3" : "yellow",
+	"4" : "blue"
+};
 for(let k=0;k<8;k++) {
 	for(let m=0;m<8;m++) {
 		let x=k*100;
@@ -280,15 +286,21 @@ io.sockets.on('connection', function(socket) {
 							socket.broadcast.emit("GoldStolen",chores[i]);
 							chores.splice(i,1);
 							if(chores.length === 0) {
+
 								io.sockets.emit('Game Over', [
-									{name : players[0].name, score : players[0].score},
-									{name : players[1].name, score : players[1].score},
-									{name : players[2].name, score : players[2].score},
-									{name : players[2].name, score : players[2].score}
+									{
+										name : players[0].name,
+										score : players[0].score,
+										id : 0
+									},
+									{name : players[1].name, score : players[1].score, id : 1},
+									{name : players[3].name, score : players[3].score, id : 2},
+									{name : players[2].name, score : players[2].score, id : 3},
+
 								].sort(function(a,b) {
 									return a.score <= b.score
 								}));
-								// terminate here
+								//process.exit();
 							}
 						}
 					}
