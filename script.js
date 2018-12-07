@@ -334,11 +334,7 @@ $(function() {
 				for(let i = 1;i <= 4; i++)
 					if(players[i] !== undefined)
 						index = i - 1;
-				console.log(index + "player ends the game");
-
-
 				let text = "Game Over ! \n";
-
 				for(const item of data){
 					text += item.name + ' - ' + item.score;
 					if(item.id === index)
@@ -347,8 +343,9 @@ $(function() {
 				}
 				console.log(text);
 				console.log(JSON.stringify(data));
-				canPlay = false;
 				alert(text);
+				canPlay = false;
+				socket.emit('game ended');
 				socket.disconnect();
 			};
 			setTimeout(function(){
